@@ -2,8 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:pertemuan6/page/dashboard.dart';
 import 'package:pertemuan6/page/profile.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+import 'package:pertemuan6/auth/auth_page.dart';
+import 'package:firebase_core/firebase_core.dart'; 
 
-void main(){
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+ await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyBqJbB433UabYNfRw_TcQpu22fWAW0qnWE", // Masukkan apiKey dari gambar kamu
+      appId: "1:994205167681:web:790e4552271000365d16c0",    // Masukkan appId dari gambar kamu
+      messagingSenderId: "994205167681", // Masukkan messagingSenderId kamu
+      projectId: 'p12pemmob',       // Masukkan projectId kamu
+      authDomain: 'p12pemmob.firebaseapp.com', // Masukkan authDomain kamu
+      storageBucket: 'p12pemmob.firebasestorage.app',
+    ),
+  );          
   runApp(MyApp());
 }
 

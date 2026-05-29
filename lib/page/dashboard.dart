@@ -3,10 +3,12 @@ import 'package:pertemuan6/pertemuan/pertemuan6.dart';
 import 'package:pertemuan6/pertemuan/pertemuan7.dart';
 import 'package:pertemuan6/pertemuan/pertemuan8.dart';
 import 'package:pertemuan6/pertemuan/pertemuan9.dart';
+import 'package:pertemuan6/pertemuan/pertemuan10.dart';
+import 'package:pertemuan6/auth/register_page.dart';
+import 'package:pertemuan6/auth/login_page.dart';
 
 class DashboardPage extends StatelessWidget {
   final List<Map<String, dynamic>> menuItems = [
-    
     {
       "title": "Pertemuan 6",
       "icon": Icons.auto_stories,
@@ -31,51 +33,91 @@ class DashboardPage extends StatelessWidget {
       "color": Colors.pink,
       "page": DateTimePickerForm(),
     },
+    {
+      "title": "Pertemuan 10",
+      "icon": Icons.auto_stories,
+      "color": Colors.blue,
+      "page": const Pertemuan10(), // Pastikan nama class-nya benar
+    },
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
+    // 1. TAMBAHKAN DefaultTabController DI PALING LUAR
+    return DefaultTabController(
+      length: 3, // Jumlah tab yang dibuat
+      child: Scaffold(
+        backgroundColor: Colors.grey[100],
 
-      appBar: AppBar(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(24),
+        appBar: AppBar(
+          // (Opsional) Saya hilangkan lengkungan bawah agar TabBar menempel rapi dengan AppBar
+          elevation: 0,
+          backgroundColor: Colors.blueAccent,
+          foregroundColor: Colors.white,
+          title: const Text(
+            'Dashboard',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          
+          // 2. TAMBAHKAN TabBar DI BAGIAN BOTTOM APPBAR
+          bottom: const TabBar(
+            indicatorColor: Colors.white,
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white70,
+            tabs: [
+              Tab(icon: Icon(Icons.grid_view), text: "Menu Utama"),
+              Tab(icon: Icon(Icons.star), text: "Favorit"),
+              Tab(icon: Icon(Icons.info), text: "Info"),
+            ],
           ),
         ),
-        elevation: 0,
-        backgroundColor: Colors.blueAccent,
-        title: Text(
-          'Dashboard',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GridView.builder(
-          itemCount: menuItems.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 16,
-            childAspectRatio: 1,
-          ),
-          itemBuilder: (context, index) {
-            final item = menuItems[index];
-            return _buildMenuCard(
-              context,
-              title: item['title'],
-              icon: item['icon'],
-              color: item['color'],
-              onTap: () {
-                // Action klik
-                Navigator.push(context, MaterialPageRoute(builder: (context) => item['page']));
-              },
-            );
-          },
+        // 3. UBAH BODY MENJADI TabBarView
+        body: TabBarView(
+          children: [
+            // --- TAB 1: Berisi GridView / Menu Kotak-kotak kamu yang lama ---
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: GridView.builder(
+                itemCount: menuItems.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  childAspectRatio: 1,
+                ),
+                itemBuilder: (context, index) {
+                  final item = menuItems[index];
+                  return _buildMenuCard(
+                    context,
+                    title: item['title'],
+                    icon: item['icon'],
+                    color: item['color'],
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => item['page']));
+                    },
+                  );
+                },
+              ),
+            ),
+
+            // --- TAB 2: Halaman Baru (Favorit) ---
+            const Center(
+              child: Text(
+                "Ini adalah Halaman Tab Favorit",
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+            ),
+
+            // --- TAB 3: Halaman Baru (Info) ---
+            const Center(
+              child: Text(
+                "Ini adalah Halaman Tab Info",
+                style: TextStyle(fontSize: 18, color: Colors.grey),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -99,9 +141,8 @@ class DashboardPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Icon dengan background
               Container(
-                padding: EdgeInsets.all(15),
+                padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   color: color.withOpacity(0.1),
                   shape: BoxShape.circle,
@@ -112,11 +153,11 @@ class DashboardPage extends StatelessWidget {
                   color: color,
                 ),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
